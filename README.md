@@ -7,8 +7,12 @@ The idea behind Felicia is simple: first you write some text and then you encryp
 Use Felicia to experiment with different ciphers, keys lengths and initialization vectors. A good way to learn how encryption works is to provide the wrong key and/or cipher for decrypting the data and watch the data distortion unfold. 
 
 Felica currently supports the following ciphers:
+
 AES
+
 Blowfish
+
+CAST
 
 
 
