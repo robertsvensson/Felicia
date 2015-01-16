@@ -4,6 +4,8 @@ from ScrolledText import *
 
 # Loading PyCrypto library
 from Crypto.Cipher import AES
+from Crypto.Cipher import ARC2
+from Crypto.Cipher import ARC4
 from Crypto.Cipher import Blowfish
 from Crypto.Cipher import CAST
 
@@ -32,6 +34,8 @@ def getKey():
 def getIV():
 	s = IVTextField.get()
 	return s
+
+######### The encryption part ################	
 	
 def ef(s):
 	key = getKey()
@@ -45,6 +49,17 @@ def ef(s):
 	if cipherType =='AES':
 		cipher = AES.new(key, AES.MODE_CFB, iv)
 		e = cipher.encrypt(s)
+
+	if cipherType =='ARC2':
+		cipher = ARC2.new(key, ARC2.MODE_CFB, iv)
+		e = cipher.encrypt(s)
+		
+	
+	# ARC4 does not make use of IV
+	if cipherType =='ARC4':
+		cipher = ARC4.new(key)
+		e = cipher.encrypt(s)
+
 		
 	# Blowfish uses an IV of eight bytes. Blowfish is a block cipher.
 	elif cipherType =='Blowfish':
@@ -73,6 +88,8 @@ def ef(s):
 	f.write(e)
 	f.close()
 
+#################################################	
+	
 def eRes(cipherType, key, iv, s):
 	cipherType = cipherType 
 	key = key
@@ -86,6 +103,9 @@ def eRes(cipherType, key, iv, s):
 	textPad.insert(INSERT,e)
 	textPad.grid(row=0, column=0, columnspan=tpwidth, padx=5, pady=5)	
 
+####################### The decryption part ##############	
+	
+	
 def ref():
 	# Open secret file
 	f = open('secrets.txt','r')
@@ -101,6 +121,14 @@ def ref():
 	if cipherType =='AES':
 		cipher = AES.new(key, AES.MODE_CFB, iv)
 		e = 'THE DECRYPTED CONTENT IS: '+cipher.decrypt(s)+'\n'
+		
+	if cipherType =='ARC2':
+		cipher = ARC2.new(key, ARC2.MODE_CFB, iv)
+		e = 'THE DECRYPTED CONTENT IS: '+cipher.decrypt(s)+'\n'	
+
+	if cipherType =='ARC4':
+		cipher = ARC4.new(key)
+		e = 'THE DECRYPTED CONTENT IS: '+cipher.decrypt(s)+'\n'	
 		
 	elif cipherType =='Blowfish':
 		cipher = Blowfish.new(key, Blowfish.MODE_CBC, iv)
@@ -118,6 +146,8 @@ def ref():
 	
 	# Close secret file
 	f.close()
+	
+###########################################################
 	
 def currentCol(curCol):
 		curCol = curCol+1
@@ -153,12 +183,12 @@ keyTextField.grid(row=2, column=curCol, padx=5, pady=5)
 curCol = 0
 
 curCol = currentCol(curCol)
-cipherTextFieldLabel = Tkinter.Label(top, text='Cipher (CAST, AES, Blowfish)')
+cipherTextFieldLabel = Tkinter.Label(top, text='Cipher (ARC2, ARC4, CAST, AES, Blowfish)')
 cipherTextFieldLabel.grid(row=3, column=curCol, padx=5, pady=5)
 
 curCol = currentCol(curCol)
 cipherTextField = Tkinter.Entry(top, width=30)
-cipherTextField.insert(0,'CAST')
+cipherTextField.insert(0,'ARC4')
 cipherTextField.grid(row=3, column=curCol, padx=5, pady=5)
 
 curCol = 0
