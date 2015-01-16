@@ -10,6 +10,10 @@ Felica currently supports the following ciphers:
 
 AES
 
+ARC2
+
+ARC4
+
 Blowfish
 
 CAST
