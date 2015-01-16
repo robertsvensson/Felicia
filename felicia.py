@@ -1,5 +1,5 @@
 import Tkinter
-from Tkinter import BOTH, END, LEFT, INSERT
+from Tkinter import *
 from ScrolledText import *
 import tkMessageBox
 
@@ -24,7 +24,7 @@ curCol = int(curCol)
 
 
 # Method to read the data from the text area and send it to the ef()
-# method fro encryption
+# method from encryption
 def encryptText():
 	s = textPad.get(1.0,END)
 	ef(s)
@@ -43,6 +43,7 @@ def ef(s):
 	key = getKey()
 	iv = getIV()
 	s = s
+	x = ''
 
 	try:
 		cipherType = cipherTextField.get()
@@ -98,17 +99,20 @@ def ef(s):
 			padding = pack('b'*plen, *padding)
 			e = cipher.encrypt(s+padding)
 
-	except ValueError as e:
-		tkMessageBox.showinfo("Info", e)
+	except ValueError as x:
+		tkMessageBox.showinfo("Info", x)
 		
-	except TypeError as e:
-		tkMessageBox.showinfo("info", e)
+	except TypeError as x:
+		tkMessageBox.showinfo("info", x)
 		
-	eRes(cipherType, key, iv, s)
-		
-	f = open('secrets.txt', 'w+')
-	f.write(e)
-	f.close()
+	if x =='':
+		eRes(cipherType, key, iv, s)
+		f = open('secrets.txt', 'w+')
+		f.write(e)
+		f.close()
+	
+	
+	
 
 #################################################	
 	
@@ -118,6 +122,8 @@ def eRes(cipherType, key, iv, s):
 	iv = iv
 	s = s
 	
+	# Clear the textPad
+	textPad.delete(1.0,END)
 	
 	e = s+' was written to file using '+cipherType+' with key '+key+' and an initialization vector of '+iv
 	
@@ -196,8 +202,8 @@ textPad.grid(row=0, column=0, columnspan=tpwidth, padx=5, pady=5)
 textPad.insert(INSERT,'ASCII clear text')
 
 curCol = currentCol(curCol)
-IVTextFieldLabel = Tkinter.Label(top, text='IV, salt, seed, or nonce')
-IVTextFieldLabel.grid(row=1, column=curCol, padx=5, pady=5)
+IVTextFieldLabel = Tkinter.Label(top, text='IV, salt, seed, or nonce:')
+IVTextFieldLabel.grid(row=1, column=curCol, padx=5, pady=5, sticky=W)
 
 curCol = currentCol(curCol)
 IVTextField = Tkinter.Entry(top, width=30)
@@ -207,8 +213,8 @@ IVTextField.grid(row=1, column=curCol, padx=5, pady=5)
 curCol = 0
 
 curCol = currentCol(curCol)
-keyTextFieldLabel = Tkinter.Label(top, text='Encryption key')
-keyTextFieldLabel.grid(row=2, column=curCol, padx=5, pady=5)
+keyTextFieldLabel = Tkinter.Label(top, text='Encryption key:')
+keyTextFieldLabel.grid(row=2, column=curCol, padx=5, pady=5, sticky=W)
 
 curCol = currentCol(curCol)
 keyTextField = Tkinter.Entry(top, width=30)
@@ -218,13 +224,13 @@ keyTextField.grid(row=2, column=curCol, padx=5, pady=5)
 curCol = 0
 
 curCol = currentCol(curCol)
-cipherTextFieldLabel = Tkinter.Label(top, text='Cipher (ARC2, ARC4, CAST, AES, Blowfish, DES3)')
-cipherTextFieldLabel.grid(row=3, column=curCol, padx=5, pady=5)
+cipherTextFieldLabel = Tkinter.Label(top, text='Cipher (ARC2, ARC4, CAST, AES, Blowfish, DES3):')
+cipherTextFieldLabel.grid(row=3, column=curCol, padx=5, pady=5, sticky=W)
 
 curCol = currentCol(curCol)
 cipherTextField = Tkinter.Entry(top, width=30)
 cipherTextField.insert(0,'DES3')
-cipherTextField.grid(row=3, column=curCol, padx=5, pady=5)
+cipherTextField.grid(row=3, column=curCol, padx=5, pady=5, sticky=W)
 
 curCol = 0
 
